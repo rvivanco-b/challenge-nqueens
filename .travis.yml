@@ -1,0 +1,15 @@
+language: python
+python:
+  - "3.6"
+services:
+  - docker
+
+before_install:
+  - docker build -t challenge-flask .
+  - docker run -d -e POSTGRES_URL=postgres -e POSTGRES_USER=rvivanco -e POSTGRES_PASS=pass1234 -e POSTGRES_DB=challengedb --name app challenge-flask 
+script:
+  - docker exec app pytest
+
+after_script:
+- docker logs app
+- docker rm -f app
